@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ssmeasyui:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="ssmeasyui.war">
+      <element id="artifact" artifact-name="ssmeasyui:war exploded" />
+    </root>
+  </artifact>
+</component>

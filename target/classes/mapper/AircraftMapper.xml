@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ifox.dao.AircraftDao">
+    <resultMap id="BaseResultMap" type="com.ifox.entity.Aircraft">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="buyDate" property="buydate" jdbcType="TIMESTAMP"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="useDate" property="usedate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, buyDate, name, remark, useDate
+  </sql>
+    <sql id="Base_Aircraft_List">
+        <where>
+            <if test="name != null and name != ''">
+                AND name LIKE "%"#{name,jdbcType=VARCHAR}"%"
+            </if>
+        </where>
+    </sql>
+
+    <select id="getCount" parameterType="com.ifox.entity.Aircraft" resultType="Integer">
+        SELECT count(*) FROM t_aircraft
+        <include refid="Base_Aircraft_List"/>
+    </select>
+
+    <select id="getAircraftList" resultMap="BaseResultMap" parameterType="com.ifox.entity.Aircraft">
+        SELECT * FROM t_aircraft
+        <include refid="Base_Aircraft_List"/>
+        <if test="page != null ">
+            limit #{page,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_aircraft
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_aircraft
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.ifox.entity.Aircraft">
+    insert into t_aircraft (id, buyDate, name, 
+      remark, useDate)
+    values (#{id,jdbcType=INTEGER}, #{buydate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{usedate,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.ifox.entity.Aircraft">
+        insert into t_aircraft
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="buydate != null">
+                buyDate,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="usedate != null">
+                useDate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="buydate != null">
+                #{buydate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="usedate != null">
+                #{usedate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ifox.entity.Aircraft">
+        update t_aircraft
+        <set>
+            <if test="buydate != null">
+                buyDate = #{buydate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="usedate != null">
+                useDate = #{usedate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ifox.entity.Aircraft">
+    update t_aircraft
+    set buyDate = #{buydate,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      useDate = #{usedate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

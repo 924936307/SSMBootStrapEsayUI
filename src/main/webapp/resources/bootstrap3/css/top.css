@@ -1,0 +1,36 @@
+@charset "utf-8";
+.header_body{
+	margin:3px auto;
+	width:750px;
+	height:37.5px;
+	background:silver; 
+}
+.header_dl{
+	float:left;
+}
+.header_dl01{
+	float:left;
+	font-family: 宋体;
+	font-size:28px;
+	font-weight:bold;
+	margin:2px 0px 1px 6px;
+	color:blue;
+}
+.header_index{
+	float:right;
+	margin:12px 5px 3px 3px;
+	font-size:18px;
+	font-family: 宋体;
+}
+.header_login{
+	float:right;
+	margin:12px 5px 3px 3px;
+	font-size:18px;
+	font-family: 宋体;
+}
+.header_register{
+	float:right;
+	margin:12px 5px 3px 3px;
+	font-size:18px;
+	font-family: 宋体;
+}

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ifox.dao.TicketOrderDao">
+    <resultMap id="BaseResultMap" type="com.ifox.entity.Ticketorder">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="orderNo" property="orderno" jdbcType="VARCHAR"/>
+        <result column="orderTime" property="ordertime" jdbcType="TIMESTAMP"/>
+        <result column="price" property="price" jdbcType="INTEGER"/>
+        <result column="spaceType" property="spacetype" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="flightName" property="flightName" jdbcType="VARCHAR"/>
+        <result column="flightId" property="flightid" jdbcType="INTEGER"/>
+        <result column="userId" property="userid" jdbcType="INTEGER"/>
+        <result column="num" property="num" jdbcType="INTEGER"/>
+        <result column="totalPrice" property="totalprice" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, orderNo, orderTime, price, spaceType, flightId, userId, num, totalPrice
+  </sql>
+
+    <sql id="Base_List">
+        <where>
+            t.userId = u.id and t.flightId = f.id
+            <if test=" orderno != null ">
+                and t.orderno LIKE "%"#{orderno,jdbcType=VARCHAR}"%"
+            </if>
+            <if test=" userName != null ">
+                and u.userName LIKE "%"#{userName,jdbcType=VARCHAR}"%"
+            </if>
+        </where>
+    </sql>
+
+    <select id="getTicketOrderByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT  orderno,f.name as flightName,f.fromCity as fromCity ,f.toCity as toCity ,f.fromTime as fromTime ,f.toTime as toTime ,ordertime ,num ,price,num*price as totalPrice  FROM t_ticketorder as t,t_user as u,t_flight f WHERE f.id = t.flightId and u.id = t.userId and u.username = #{username,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getCount" resultType="Integer" parameterType="com.ifox.entity.Ticketorder">
+        SELECT  count(*) FROM t_ticketorder as t,t_user as u ,t_flight as f
+        <include refid="Base_List"/>
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap" parameterType="com.ifox.entity.Ticketorder">
+        SELECT t.id, orderNo, orderTime, price, spaceType, flightId, userId, num, totalPrice,f.name as flightName ,u.userName
+        FROM t_ticketorder as t,t_user as u ,t_flight as f
+        <include refid="Base_List"/>
+
+    </select>
+
+
+    <select id="selectListByFlightId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * FROM t_ticketorder WHERE  flightId = #{userid,jdbcType=INTEGER}
+    </select>
+    <select id="selectListByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * FROM t_ticketorder WHERE  userId = #{userid,jdbcType=INTEGER}
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ticketorder
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_ticketorder
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.ifox.entity.Ticketorder">
+    insert into t_ticketorder (id, orderNo, orderTime, 
+      price, spaceType, flightId, 
+      userId, num, totalPrice
+      )
+    values (#{id,jdbcType=INTEGER}, #{orderno,jdbcType=VARCHAR}, #{ordertime,jdbcType=TIMESTAMP}, 
+      #{price,jdbcType=INTEGER}, #{spacetype,jdbcType=VARCHAR}, #{flightid,jdbcType=INTEGER}, 
+      #{userid,jdbcType=INTEGER}, #{num,jdbcType=INTEGER}, #{totalprice,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.ifox.entity.Ticketorder">
+        insert into t_ticketorder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderno != null">
+                orderNo,
+            </if>
+            <if test="ordertime != null">
+                orderTime,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="spacetype != null">
+                spaceType,
+            </if>
+            <if test="flightid != null">
+                flightId,
+            </if>
+            <if test="userid != null">
+                userId,
+            </if>
+            <if test="num != null">
+                num,
+            </if>
+            <if test="totalprice != null">
+                totalPrice,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderno != null">
+                #{orderno,jdbcType=VARCHAR},
+            </if>
+            <if test="ordertime != null">
+                #{ordertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=INTEGER},
+            </if>
+            <if test="spacetype != null">
+                #{spacetype,jdbcType=VARCHAR},
+            </if>
+            <if test="flightid != null">
+                #{flightid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="num != null">
+                #{num,jdbcType=INTEGER},
+            </if>
+            <if test="totalprice != null">
+                #{totalprice,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ifox.entity.Ticketorder">
+        update t_ticketorder
+        <set>
+            <if test="orderno != null">
+                orderNo = #{orderno,jdbcType=VARCHAR},
+            </if>
+            <if test="ordertime != null">
+                orderTime = #{ordertime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=INTEGER},
+            </if>
+            <if test="spacetype != null">
+                spaceType = #{spacetype,jdbcType=VARCHAR},
+            </if>
+            <if test="flightid != null">
+                flightId = #{flightid,jdbcType=INTEGER},
+            </if>
+            <if test="userid != null">
+                userId = #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="num != null">
+                num = #{num,jdbcType=INTEGER},
+            </if>
+            <if test="totalprice != null">
+                totalPrice = #{totalprice,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.ifox.entity.Ticketorder">
+    update t_ticketorder
+    set orderNo = #{orderno,jdbcType=VARCHAR},
+      orderTime = #{ordertime,jdbcType=TIMESTAMP},
+      price = #{price,jdbcType=INTEGER},
+      spaceType = #{spacetype,jdbcType=VARCHAR},
+      flightId = #{flightid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      num = #{num,jdbcType=INTEGER},
+      totalPrice = #{totalprice,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
